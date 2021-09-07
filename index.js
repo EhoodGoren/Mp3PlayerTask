@@ -47,13 +47,32 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {
-    console.log(/* your code here */)
+  playSong(song) {  //logs the info about a song
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.`)
   },
 }
 
+/*
+Aiding functions
+*/
+
+//Returns info about a song from id (none if unmatched)
+function songById(id){
+  let playerSongs = player.songs;
+  //Loops through the songs array and looks for the id in each element
+  for(let tracks of playerSongs){
+    if(tracks.id===id) return tracks;
+  }
+  return "No such song. Try another id";
+}
+
+/*
+Task functions
+*/
+
+//Logs a song's info
 function playSong(id) {
-  // your code here
+  player.playSong(songById(id));
 }
 
 function removeSong(id) {
