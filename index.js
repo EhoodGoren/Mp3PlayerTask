@@ -48,7 +48,7 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {  //logs the info about a song
-    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.`)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationToMS(song.duration)}.`)
   },
 }
 
@@ -66,6 +66,11 @@ function songById(id){
   return "No such song. Try another id";
 }
 
+//Changes duration format from seconds to minutes:seconds
+function durationToMS(duration){
+  return `${Math.floor(duration/60)}:${duration%60}`;
+}
+
 /*
 Task functions
 */
@@ -74,7 +79,7 @@ Task functions
 function playSong(id) {
   player.playSong(songById(id));
 }
-
+playSong(7);
 function removeSong(id) {
   // your code here
 }
