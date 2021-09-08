@@ -68,9 +68,13 @@ function songById(id){
 
 //Changes duration format from seconds to minutes:seconds
 function durationToMS(duration){
-  return `${Math.floor(duration/60)}:${duration%60}`;
-}
+  let minutes=Math.floor(duration/60);
+  let seconds=duration%60;
 
+  if(minutes<10) minutes="0"+minutes;
+  if(seconds<10) seconds="0"+seconds;
+  return `${minutes}:${seconds}`;
+}
 /*
 Task functions
 */
