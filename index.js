@@ -79,9 +79,14 @@ Task functions
 function playSong(id) {
   player.playSong(songById(id));
 }
-playSong(7);
+
 function removeSong(id) {
-  // your code here
+  player.songs.splice(player.songs.indexOf(songById(id)), 1);
+  for(let lists of player.playlists){
+    if(lists.songs.includes(id)){
+      lists.songs.splice(lists.songs.indexOf(id),1);
+    }
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
