@@ -174,7 +174,21 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  chosenPlaylist=playlistById(playlistId).songs;
+  try{
+    if(chosenPlaylist.includes(songId)){
+      chosenPlaylist.splice(chosenPlaylist.indexOf(songId),1);
+      if(chosenPlaylist.length===0){
+          removePlaylist(playlistId);
+      }
+    }
+    else{
+      chosenPlaylist.push(songId);
+    }
+  }
+  catch{
+    throw "Invalid id";
+  }
 }
 
 function playlistDuration(id) {
