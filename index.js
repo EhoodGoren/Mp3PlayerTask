@@ -63,7 +63,7 @@ function songById(id){
   for(let tracks of playerSongs){
     if(tracks.id===id) return tracks;
   }
-  return "No such song. Try another id";
+  throw "No such id!";
 }
 
 //Changes duration format from seconds to minutes:seconds
@@ -81,7 +81,12 @@ Task functions
 
 //Logs a song's info
 function playSong(id) {
-  player.playSong(songById(id));
+  try{
+    player.playSong(songById(id));
+  }
+  catch{
+    throw "Invalid id";
+  }
 }
 
 function removeSong(id) {
