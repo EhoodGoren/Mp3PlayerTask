@@ -84,6 +84,15 @@ function durationToMS(duration){
   if(seconds<10) seconds="0"+seconds;
   return `${minutes}:${seconds}`;
 }
+
+//Changes duration format from minutes:seconds to seconds
+function durationToSec(duration){
+  duration.split("");
+  let secDuration=0;
+  secDuration+=parseInt(duration[0]*600)+parseInt(duration[1]*60)+parseInt(duration[3])*10+parseInt(duration[4])
+  return secDuration;
+}
+
 /*
 Task functions
 */
@@ -133,7 +142,7 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  playerPlaylists=player.playlists;
+  let playerPlaylists=player.playlists;
   try{
     playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
   }
@@ -174,7 +183,7 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  chosenPlaylist=playlistById(playlistId).songs;
+  let chosenPlaylist=playlistById(playlistId).songs;
   try{
     if(chosenPlaylist.includes(songId)){
       chosenPlaylist.splice(chosenPlaylist.indexOf(songId),1);
@@ -192,7 +201,17 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  let chosenPlaylist=playlistById(id).songs
+  let sum=0;
+  for(let song of chosenPlaylist){
+    if(typeof(songById(song).duration)==='number'){
+      sum+=songById(song).duration;
+    }
+    else{
+      sum+=durationToSec(songById(song).duration);
+    }
+  }
+  return sum;
 }
 
 function searchByQuery(query) {
