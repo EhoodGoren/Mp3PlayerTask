@@ -90,11 +90,16 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  player.songs.splice(player.songs.indexOf(songById(id)), 1);
-  for(let list of player.playlists){
-    if(list.songs.includes(id)){
-      list.songs.splice(list.songs.indexOf(id),1);
+  try{
+    player.songs.splice(player.songs.indexOf(songById(id)), 1);
+    for(let list of player.playlists){
+      if(list.songs.includes(id)){
+        list.songs.splice(list.songs.indexOf(id),1);
+      }
     }
+  }
+  catch{
+    throw "Invalid id";
   }
 }
 
