@@ -163,7 +163,14 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  try{
+    for(let song of playlistById(id).songs){
+      playSong(song);
+    }
+  }
+  catch{
+    throw "Invalid id";
+  }
 }
 
 function editPlaylist(playlistId, songId) {
