@@ -86,15 +86,31 @@ function playSong(id) {
 
 function removeSong(id) {
   player.songs.splice(player.songs.indexOf(songById(id)), 1);
-  for(let lists of player.playlists){
-    if(lists.songs.includes(id)){
-      lists.songs.splice(lists.songs.indexOf(id),1);
+  for(let list of player.playlists){
+    if(list.songs.includes(id)){
+      list.songs.splice(list.songs.indexOf(id),1);
     }
   }
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if(!id>0){
+    id=0;
+    let taken=false;
+    do {
+      taken=false;
+      id++;
+      for(let song of player.songs){
+        if(song.id===id){
+          taken=true;
+          break;
+        }
+      }
+    } while(taken===true);
+  }
+
+  player.songs.push({"id":id,"title":title,"album":album,"artist":artist,"duration":durationToMS(duration)});
+  return id;
 }
 
 function removePlaylist(id) {
