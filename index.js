@@ -66,6 +66,15 @@ function songById(id){
   throw "No such id!";
 }
 
+function playlistById(id){
+  let playerPlaylists = player.playlists;
+  //Loops through the playlists array and looks for the id in each element
+  for(let lists of playerPlaylists){
+    if(lists.id===id) return lists;
+  }
+  throw "No such id!";
+}
+
 //Changes duration format from seconds to minutes:seconds
 function durationToMS(duration){
   let minutes=Math.floor(duration/60);
@@ -124,7 +133,13 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  playerPlaylists=player.playlists;
+  try{
+    playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
+  }
+  catch{
+    throw "Invalid id";
+  }
 }
 
 function createPlaylist(name, id) {
