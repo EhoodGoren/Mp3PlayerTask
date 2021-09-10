@@ -137,7 +137,7 @@ function addSong(title, album, artist, duration, id) {
     } while(taken===true);
   }
 
-  player.songs.push({"id":id,"title":title,"album":album,"artist":artist,"duration":durationToMS(duration)});
+  player.songs.push({"id":id,"title":title,"album":album,"artist":artist,"duration":durationToSec(duration)});
   return id;
 }
 
