@@ -215,7 +215,20 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  let songs=[];
+  let playlists=[];
+  for(let song of player.songs){
+    if(song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)){
+      songs.push(song);
+    }
+  }
+  for(let playlist of player.playlists){
+    if(playlist.name.includes(query)){
+      playlists.push(playlist);
+    }
+  }
+  const results = {"songs":songs.sort(), "playlists":playlists.sort()};
+  return results;
 }
 
 function searchByDuration(duration) {
