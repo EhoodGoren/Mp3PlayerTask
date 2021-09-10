@@ -165,10 +165,9 @@ function createPlaylist(name, id) {
         }
       }
     } while(taken===true);
-
-    player.playlists.push({"id":id,"name":name,"songs":[]});
-    return id;
   }
+  player.playlists.push({"id":id,"name":name,"songs":[]});
+    return id;
 }
 
 function playPlaylist(id) {
