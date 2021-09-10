@@ -222,12 +222,14 @@ function searchByQuery(query) {
       songs.push(song);
     }
   }
+  songs.sort(function(a,b){if(a.title.toLowerCase()<b.title.toLowerCase())return -1; else return 1;});
   for(let playlist of player.playlists){
     if(playlist.name.includes(query)){
       playlists.push(playlist);
     }
   }
-  const results = {"songs":songs.sort(), "playlists":playlists.sort()};
+  playlists.sort(function(a,b){if(a.name.toLowerCase()<b.name.toLowerCase())return -1; else return 1;});
+  const results = {"songs":songs, "playlists":playlists};
   return results;
 }
 
