@@ -93,6 +93,19 @@ function durationToSec(duration){
   return secDuration;
 }
 
+function isIdTaken(id, where){
+  if(where==="songs"){
+    for(let song of player.songs){
+      if(song.id===id) throw "Id taken";
+    }
+  }
+  if(where==="playlists"){
+    for(let list of player.playlists){
+      if(list.id===id) throw "Id taken";
+    }
+  }
+}
+
 /*
 Task functions
 */
@@ -122,6 +135,14 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
+  if(id>0){
+    try{
+      isIdTaken(id,"songs");
+    }
+    catch{
+      throw "Id taken";
+    }
+  }
   if(!id>0){
     id=0;
     let taken=false;
@@ -152,6 +173,14 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
+  if(id>0){
+    try{
+      isIdTaken(id,"playlists");
+    }
+    catch{
+      throw "Id is taken"
+    }
+  }
   if(!id>0){
     id=0;
     let taken=false;
