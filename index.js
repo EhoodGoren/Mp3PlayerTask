@@ -47,17 +47,18 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {  //logs the info about a song
+  //logs the info about a song
+  playSong(song) {
     console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationToMS(song.duration)}.`)
   },
 }
 
 
 /*
-Aiding functions
-*/
+ * Aiding functions
+ */
 
-//Returns the song object that matches the id (error if unmatched)
+// Returns the song object that matches the id (error if unmatched)
 function songById(id){
   let playerSongs = player.songs;
   //Loops through the songs array and looks for the id in each element
@@ -67,7 +68,7 @@ function songById(id){
   throw "ID doesn't exist!";
 }
 
-//Returns the playlist object that matches the id (error if unmatched)
+// Returns the playlist object that matches the id (error if unmatched)
 function playlistById(id){
   let playerPlaylists = player.playlists;
   //Loops through the playlists array and looks for the id in each element
@@ -77,7 +78,7 @@ function playlistById(id){
   throw "ID doesn't exist!";
 }
 
-//Changes duration format from seconds to minutes:seconds
+// Changes duration format from seconds to minutes:seconds
 function durationToMS(duration){
   let minutes=Math.floor(duration/60);
   let seconds=duration%60;
@@ -86,7 +87,7 @@ function durationToMS(duration){
   return `${minutes}:${seconds}`;
 }
 
-//Changes duration format from minutes:seconds to seconds
+// Changes duration format from minutes:seconds to seconds
 function durationToSec(duration){
   duration.split("");
   let secDuration=0;
@@ -99,25 +100,25 @@ function durationToSec(duration){
   return secDuration;
 }
 
-//Checks if a song with the given id already exists in the songs array. Error if there is.
+// Throws an error if a song with the given id already exists in the songs array.
 function isIdTakenSongs(id){
   for(let song of player.songs){
     if(song.id===id) throw "Id taken";
   }
 }
 
-//Checks if a playlist with the given id already exists in the playlists array. Error if there is.
+// Throws an error if a playlist with the given id already exists in the playlists array.
 function isIdTakenPlaylists(id){
   for(let list of player.playlists){
     if(list.id===id) throw "Id taken";
   }
 }
 
-//Creates a new song id, the first one from 1 (included) that isn't taken yet.
+// Creates a new song id, the first one from 1 (included) that isn't taken yet.
 function songIdGenerator(){
   id=0;
   let taken=false;
-  //Increases id by 1 every time. Loops through the songs array, trying to find a non-occupied id.
+  // Increases id by 1 every time. Loops through the songs array, trying to find a non-occupied id.
   do {
     taken=false;
     id++;
@@ -131,11 +132,11 @@ function songIdGenerator(){
   return id;
 }
 
-//Creates a new playlist id, the first one from 1 (included) that isn't taken yet.
+// Creates a new playlist id, the first one from 1 (included) that isn't taken yet.
 function playlistIdGenerator(){
   id=0;
   let taken=false;
-  //Increases id by 1 every time. Loops through the playlists array, trying to find a non-occupied id.
+  // Increases id by 1 every time. Loops through the playlists array, trying to find a non-occupied id.
   do {
     taken=false;
     id++;
@@ -150,15 +151,15 @@ function playlistIdGenerator(){
 }
 
 /*
-Task functions
-*/
+ * Task functions
+ */
 
-//Logs a song's info
+// Logs a song's info
 function playSong(id) {
   player.playSong(songById(id));
 }
 
-//Removes a song from the songs and playlists arrays. Will throw an error if the id doesn't exist.
+// Removes a song from the songs and playlists arrays. Will throw an error if the id doesn't exist.
 function removeSong(id) {
   // Checks if the song id exists.
   songById(id);
@@ -171,12 +172,12 @@ function removeSong(id) {
   }
 }
 
-//Adds a new song with the given properties. Generates a new id if not provided one. Error if id is taken or not a number
+// Adds a new song with the given properties. Generates a new id if not provided one. Error if id is taken or not a number
 function addSong(title, album, artist, duration, id) {
-  if(id>0){
-    isIdTakenSongs(id);
-  } else if(id===undefined){
+  if(id===undefined){
     id=songIdGenerator();
+  } else if(id>0){
+    isIdTakenSongs(id);
   } else{
     throw "Id should be a number!"
   }
@@ -191,19 +192,19 @@ function addSong(title, album, artist, duration, id) {
   return id;
 }
 
-//Removes a playlist from the playlists arrays. Will throw an error if the id doesn't exist.
+// Removes a playlist from the playlists arrays. Will throw an error if the id doesn't exist.
 function removePlaylist(id) {
   playlistById(id); // Checks if the playlist id exists.
   let playerPlaylists=player.playlists;
   playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
 }
 
-//Creates a new playlist with the given properties. Generates a new id if not provided one. Error if id is taken or not a number.
+// Creates a new playlist with the given properties. Generates a new id if not provided one. Error if id is taken or not a number.
 function createPlaylist(name, id) {
-  if(id>0){
-      isIdTakenPlaylists(id);
-  }else if(id===undefined){
+  if(id===undefined){
     id=playlistIdGenerator();
+  }else if(id>0){
+    isIdTakenPlaylists(id);
   }else{
     throw "Id should be a number!";
   }
@@ -211,7 +212,7 @@ function createPlaylist(name, id) {
     return id;
 }
 
-//Logs a playlist's songs info.
+// Logs a playlist's songs info.
 function playPlaylist(id) {
   // Checks if the playlist id exists.
   playlistById(id);
@@ -222,10 +223,10 @@ function playPlaylist(id) {
 }
 
 /*
-Removes a song if the song id exists in the playlist with the given id.
-If the playlist is then left empty it's deleted.
-If the song id didn't exist it is added to that playlist.
-*/
+ * Removes a song if the song id exists in the playlist with the given id.
+ * If the playlist is then left empty it's deleted.
+ * If the song id didn't exist it is added to that playlist.
+ */
 function editPlaylist(playlistId, songId) {
   // Checks if the playlist and song id exist.
   playlistById(playlistId);
@@ -233,7 +234,7 @@ function editPlaylist(playlistId, songId) {
 
   let chosenPlaylistSongs=playlistById(playlistId).songs;
 
-  //if the song is in the playlist removes the song from the playlist.
+  // if the song is in the playlist removes the song from the playlist.
   if(chosenPlaylistSongs.includes(songId)){
     chosenPlaylistSongs.splice(chosenPlaylistSongs.indexOf(songId),1);
     //if the playlist is left empty removes the playlist.
@@ -241,12 +242,12 @@ function editPlaylist(playlistId, songId) {
         removePlaylist(playlistId);
     }
   } else{
-    //if the song id didn't exist in the playlist, adds it
+    // if the song id didn't exist in the playlist, adds it
     chosenPlaylistSongs.push(songId);
   }
 }
 
-//Sums the total duration of all the songs in a playlist
+// Sums the total duration of all the songs in a playlist
 function playlistDuration(id) {
   // Checks if the playlist id exists.
   playlistById(id);
@@ -260,15 +261,15 @@ function playlistDuration(id) {
 }
 
 /*
-Returns an object with:
-1) an array with all songs' title/album/artist which contains a given query, sorted by title.
-2) an array of playlists' name which contains the given query, sorted by name.
+ * Returns an object with:
+ * 1) an array with all songs' title/album/artist which contains a given query, sorted by title.
+ * 2) an array of playlists' name which contains the given query, sorted by name.
 */
 function searchByQuery(query) {
   let songs=[];
   let playlists=[];
   query=query.toLowerCase();
-  //Searches the query in songs' attributes.
+  // Searches the query in songs' attributes.
   for(let song of player.songs){
     if(song.title.toLowerCase().includes(query) || 
       song.album.toLowerCase().includes(query) || 
@@ -277,19 +278,19 @@ function searchByQuery(query) {
       songs.push(song);
     }
   }
-  //sorts by title
+  // sorts by title
   songs.sort(function(a,b){
     if(a.title.toLowerCase()<b.title.toLowerCase()) return -1; 
     else return 1;
   });
 
-  //Searches the query in playlists' attributes.
+  // Searches the query in playlists' attributes.
   for(let playlist of player.playlists){
     if(playlist.name.toLowerCase().includes(query)){
       playlists.push(playlist);
     }
   }
-  //sorts by name
+  // sorts by name
   playlists.sort(function(a,b){
     if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
     else return 1;
@@ -299,26 +300,28 @@ function searchByQuery(query) {
   return results;
 }
 
-//Returns the song/playlist with the closest duration to what was given
+// Returns the song/playlist with the closest duration to what was given
 function searchByDuration(duration) {
-  //Converts duraiton from mm:ss format to seconds.
+  // Converts duraiton from mm:ss format to seconds.
   givenDuration=durationToSec(duration);
 
   let closestTime=Math.abs(player.songs[0].duration-givenDuration);
   let closestElement=player.songs[0];
 
   for(let song of player.songs){
-    //if a checked song is closer in duration than the closest element yet, it is now the closest element
-    if(Math.abs(givenDuration-song.duration)<closestTime){
-      closestTime=Math.abs(givenDuration-song.duration);
+    let currentDiff=Math.abs(givenDuration-song.duration);
+    // if a checked song is closer in duration than the closest element yet, it is now the closest element
+    if(currentDiff<closestTime){
+      closestTime=currentDiff;
       closestElement=song;
     }
   }
 
   for(let playlist of player.playlists){
-    //if a checked playlist is closer in duration than the closest element yet, it is now the closest element
-    if(Math.abs(givenDuration-playlistDuration(playlist.id))<closestTime){
-      closestTime=Math.abs(givenDuration-playlistDuration(playlist.id));
+    let currentDiff=Math.abs(givenDuration-playlistDuration(playlist.id));
+    // if a checked playlist is closer in duration than the closest element yet, it is now the closest element
+    if(currentDiff<closestTime){
+      closestTime=currentDiff;
       closestElement=playlist;
     }
   }
