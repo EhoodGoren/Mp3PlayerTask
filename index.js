@@ -64,7 +64,7 @@ function songById(id){
   for(let tracks of playerSongs){
     if(tracks.id===id) return tracks;
   }
-  throw "No such id!";
+  throw "ID doesn't exist!";
 }
 
 //Returns the playlist object that matches the id (error if unmatched)
@@ -74,7 +74,7 @@ function playlistById(id){
   for(let lists of playerPlaylists){
     if(lists.id===id) return lists;
   }
-  throw "No such id!";
+  throw "ID doesn't exist!";
 }
 
 //Changes duration format from seconds to minutes:seconds
@@ -151,9 +151,9 @@ function playSong(id) {
   player.playSong(songById(id));
 }
 
-//Removes a song from the songs array. Will throw an error if the id doesn't exist.
+//Removes a song from the songs and playlists arrays. Will throw an error if the id doesn't exist.
 function removeSong(id) {
-  songById(id); // Tries to reach the song with id.
+  songById(id); // Checks if the song id exists.
   player.songs.splice(player.songs.indexOf(songById(id)), 1);
   for(let list of player.playlists){
     if(list.songs.includes(id)){
@@ -175,16 +175,14 @@ function addSong(title, album, artist, duration, id) {
   return id;
 }
 
+//Removes a playlist from the playlists arrays. Will throw an error if the id doesn't exist.
 function removePlaylist(id) {
+  playlistById(id); // Checks if the playlist id exists.
   let playerPlaylists=player.playlists;
-  try{
-    playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
-  }
-  catch{
-    throw "Invalid id";
-  }
+  playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
 }
 
+//Creates a new playlist with the given properties. Generates a new id if not provided one. Error if id is taken or not a number.
 function createPlaylist(name, id) {
   if(id>0){
       isIdTakenPlaylists(id);
@@ -197,39 +195,35 @@ function createPlaylist(name, id) {
     return id;
 }
 
+//Logs a playlist's songs info.
 function playPlaylist(id) {
-  try{
-    for(let song of playlistById(id).songs){
-      playSong(song);
-    }
-  }
-  catch{
-    throw "Invalid id";
+  playlistById(id); // Checks if the playlist id exists.
+  for(let song of playlistById(id).songs){
+    playSong(song);
   }
 }
 
+//Removes a song if the song id exists in the playlist with the given id. If the playlist is then left empty it's deleted. If the song id didn't exist it is added to that playlist.
 function editPlaylist(playlistId, songId) {
-  let chosenPlaylist=playlistById(playlistId).songs;
-  try{
-    if(chosenPlaylist.includes(songId)){
-      chosenPlaylist.splice(chosenPlaylist.indexOf(songId),1);
-      if(chosenPlaylist.length===0){
-          removePlaylist(playlistId);
-      }
+  playlistById(playlistId); // Checks if the playlist id exists.
+  songById(songId); // Checks if the song id exists.
+
+  let chosenPlaylistSongs=playlistById(playlistId).songs;
+
+  if(chosenPlaylistSongs.includes(songId)){ //if the song is in the playlist removes the song from the playlist.
+    chosenPlaylistSongs.splice(chosenPlaylistSongs.indexOf(songId),1);
+    if(chosenPlaylistSongs.length===0){ //if the playlist is left empty removes the playlist.
+        removePlaylist(playlistId);
     }
-    else{
-      chosenPlaylist.push(songId);
-    }
-  }
-  catch{
-    throw "Invalid id";
+  } else{ //if the song id didn't exist in the playlist, adds it
+    chosenPlaylistSongs.push(songId);
   }
 }
 
 function playlistDuration(id) {
-  let chosenPlaylist=playlistById(id).songs
+  let chosenPlaylistSongs=playlistById(id).songs
   let sum=0;
-  for(let song of chosenPlaylist){
+  for(let song of chosenPlaylistSongs){
     if(typeof(songById(song).duration)==='number'){
       sum+=songById(song).duration;
     }
