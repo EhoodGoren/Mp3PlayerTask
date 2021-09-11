@@ -162,9 +162,9 @@ function playSong(id) {
 // Removes a song from the songs and playlists arrays. Will throw an error if the id doesn't exist.
 function removeSong(id) {
   // Checks if the song id exists.
-  songById(id);
+  let currentSong=songById(id);
 
-  player.songs.splice(player.songs.indexOf(songById(id)), 1);
+  player.songs.splice(player.songs.indexOf(currentSong), 1);
   for(let list of player.playlists){
     if(list.songs.includes(id)){
       list.songs.splice(list.songs.indexOf(id),1);
@@ -194,9 +194,11 @@ function addSong(title, album, artist, duration, id) {
 
 // Removes a playlist from the playlists arrays. Will throw an error if the id doesn't exist.
 function removePlaylist(id) {
-  playlistById(id); // Checks if the playlist id exists.
+  // Checks if the playlist id exists.
+  let currentPlaylist=playlistById(id);
+
   let playerPlaylists=player.playlists;
-  playerPlaylists.splice(playerPlaylists.indexOf(playlistById(id)), 1);
+  playerPlaylists.splice(playerPlaylists.indexOf(currentPlaylist), 1);
 }
 
 // Creates a new playlist with the given properties. Generates a new id if not provided one. Error if id is taken or not a number.
@@ -215,9 +217,9 @@ function createPlaylist(name, id) {
 // Logs a playlist's songs info.
 function playPlaylist(id) {
   // Checks if the playlist id exists.
-  playlistById(id);
+  let currentPlaylist=playlistById(id);
 
-  for(let song of playlistById(id).songs){
+  for(let song of currentPlaylist.songs){
     playSong(song);
   }
 }
@@ -229,9 +231,7 @@ function playPlaylist(id) {
  */
 function editPlaylist(playlistId, songId) {
   // Checks if the playlist and song id exist.
-  playlistById(playlistId);
   songById(songId);
-
   let chosenPlaylistSongs=playlistById(playlistId).songs;
 
   // if the song is in the playlist removes the song from the playlist.
@@ -250,9 +250,9 @@ function editPlaylist(playlistId, songId) {
 // Sums the total duration of all the songs in a playlist
 function playlistDuration(id) {
   // Checks if the playlist id exists.
-  playlistById(id);
+  let currentPlaylist=playlistById(id);
 
-  let chosenPlaylistSongs=playlistById(id).songs;
+  let chosenPlaylistSongs=currentPlaylist.songs;
   let sum=0;
   for(let song of chosenPlaylistSongs){
     sum+=songById(song).duration;
@@ -305,13 +305,14 @@ function searchByDuration(duration) {
   // Converts duraiton from mm:ss format to seconds.
   givenDuration=durationToSec(duration);
 
-  let closestTime=Math.abs(player.songs[0].duration-givenDuration);
-  let closestElement=player.songs[0];
+  let closestTime;
+  let closestElement;
+  //Checks that songs array isn't empty
 
   for(let song of player.songs){
     let currentDiff=Math.abs(givenDuration-song.duration);
     // if a checked song is closer in duration than the closest element yet, it is now the closest element
-    if(currentDiff<closestTime){
+    if(closestElement===undefined || currentDiff<closestTime){
       closestTime=currentDiff;
       closestElement=song;
     }
@@ -320,7 +321,7 @@ function searchByDuration(duration) {
   for(let playlist of player.playlists){
     let currentDiff=Math.abs(givenDuration-playlistDuration(playlist.id));
     // if a checked playlist is closer in duration than the closest element yet, it is now the closest element
-    if(currentDiff<closestTime){
+    if(closestElement===undefined || currentDiff<closestTime){
       closestTime=currentDiff;
       closestElement=playlist;
     }
