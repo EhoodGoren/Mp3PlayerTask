@@ -231,6 +231,7 @@ function playlistDuration(id) {
   return sum;
 }
 
+//Returns an object with: 1) an array with all songs' title/album/artist which contains a given query, sorted by title. 2. an array of playlists' name which contains the given query, sorted by name.
 function searchByQuery(query) {
   let songs=[];
   let playlists=[];
@@ -239,33 +240,39 @@ function searchByQuery(query) {
       songs.push(song);
     }
   }
-  songs.sort(function(a,b){if(a.title.toLowerCase()<b.title.toLowerCase())return -1; else return 1;});
+  songs.sort(function(a,b){if(a.title.toLowerCase()<b.title.toLowerCase())return -1; else return 1;}); //sorts by title
+
   for(let playlist of player.playlists){
     if(playlist.name.includes(query)){
       playlists.push(playlist);
     }
   }
-  playlists.sort(function(a,b){if(a.name.toLowerCase()<b.name.toLowerCase())return -1; else return 1;});
+  playlists.sort(function(a,b){if(a.name.toLowerCase()<b.name.toLowerCase())return -1; else return 1;}); //sorts by name
+
   const results = {"songs":songs, "playlists":playlists};
   return results;
 }
 
+//Returns the song/playlist with the closest duration to what was given
 function searchByDuration(duration) {
-  givenDuration=durationToSec(duration);
+  givenDuration=durationToSec(duration); //Converts duraiton from mm:ss format to seconds.
   let closestTime=Math.abs(player.songs[0].duration-givenDuration);
   let closestElement=player.songs[0];
+
   for(let song of player.songs){
-    if(Math.abs(givenDuration-song.duration)<closestTime){
+    if(Math.abs(givenDuration-song.duration)<closestTime){ //if a checked song is closer in duration than the closest element yet, it is now the closest element
       closestTime=Math.abs(givenDuration-song.duration);
       closestElement=song;
     }
   }
+
   for(let playlist of player.playlists){
-    if(Math.abs(givenDuration-playlistDuration(playlist.id))<closestTime){
+  if(Math.abs(givenDuration-playlistDuration(playlist.id))<closestTime){ //if a checked playlist is closer in duration than the closest element yet, it is now the closest element
       closestTime=Math.abs(givenDuration-playlistDuration(playlist.id));
       closestElement=playlist;
     }
   }
+
   return closestElement;
 }
 
