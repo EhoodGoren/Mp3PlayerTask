@@ -52,11 +52,12 @@ const player = {
   },
 }
 
+
 /*
 Aiding functions
 */
 
-//Returns info about a song from id (none if unmatched)
+//Returns the song object that matches the id (error if unmatched)
 function songById(id){
   let playerSongs = player.songs;
   //Loops through the songs array and looks for the id in each element
@@ -66,6 +67,7 @@ function songById(id){
   throw "No such id!";
 }
 
+//Returns the playlist object that matches the id (error if unmatched)
 function playlistById(id){
   let playerPlaylists = player.playlists;
   //Loops through the playlists array and looks for the id in each element
@@ -79,7 +81,6 @@ function playlistById(id){
 function durationToMS(duration){
   let minutes=Math.floor(duration/60);
   let seconds=duration%60;
-
   if(minutes<10) minutes="0"+minutes;
   if(seconds<10) seconds="0"+seconds;
   return `${minutes}:${seconds}`;
@@ -93,12 +94,14 @@ function durationToSec(duration){
   return secDuration;
 }
 
+//Checks if a song with the given id already exists in the songs array. Error if there is.
 function isIdTakenSongs(id){
   for(let song of player.songs){
     if(song.id===id) throw "Id taken";
   }
 }
 
+//Checks if a playlist with the given id already exists in the playlists array. Error if there is.
 function isIdTakenPlaylists(id){
   for(let list of player.playlists){
     if(list.id===id) throw "Id taken";
@@ -111,25 +114,17 @@ Task functions
 
 //Logs a song's info
 function playSong(id) {
-  try{
-    player.playSong(songById(id));
-  }
-  catch{
-    throw "Invalid id";
-  }
+  player.playSong(songById(id));
 }
 
+//Removes a song from the songs array. Will throw an error if the id doesn't exist.
 function removeSong(id) {
-  try{
-    player.songs.splice(player.songs.indexOf(songById(id)), 1);
-    for(let list of player.playlists){
-      if(list.songs.includes(id)){
-        list.songs.splice(list.songs.indexOf(id),1);
-      }
+  songById(id); // Tries to reach the song with id.
+  player.songs.splice(player.songs.indexOf(songById(id)), 1);
+  for(let list of player.playlists){
+    if(list.songs.includes(id)){
+      list.songs.splice(list.songs.indexOf(id),1);
     }
-  }
-  catch{
-    throw "Invalid id";
   }
 }
 
