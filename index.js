@@ -337,22 +337,55 @@ function searchByDuration(duration) {
  */
 
 
+// Sorts a playlist by id, ascending.
 function sortPlaylistById(id){
   currentPlaylistSongs=playlistById(id).songs;
   currentPlaylistSongs.sort((a,b) => a-b)
   return currentPlaylistSongs;
 }
 
+// Sorts the songs array by id, ascending.
 function sortSongsById(){
-  let idArr=[];
+  let newArr=[];
+
+  // Pushes songs' id and sorts them ascending.
   for(let song of player.songs){
-    idArr.push(song.id);
+    newArr.push(song.id);
   }
-  idArr.sort((a,b) => a-b);
-  idArr=idArr.map(songById);
-  return idArr;
+  newArr.sort((a,b) => a-b);
+
+  // Converts the id to song.
+  newArr=newArr.map(songById);
+  return newArr;
 }
 
+// Returns a random song
+function randomSong(){
+  let playerSongs=player.songs;
+  return playerSongs[Math.floor(Math.random()*playerSongs.length)];
+}
+
+/*
+ * Creates a new playlist, with random songs from the songs array.
+ * Each song can't be repeated twice in a row.
+ * Duration doesn't exceed one hour.
+ */
+function dailyPlaylist(){
+  let newPlaylist=[];
+  let totalDuration=0;
+  while(totalDuration<3600){
+    let currentRandomSong = randomSong();
+
+    // Checks that the last song isn't the same one as the one to put.
+    if(currentRandomSong != newPlaylist[newPlaylist.length-1]){
+      newPlaylist.push(currentRandomSong);
+      totalDuration += currentRandomSong.duration;
+    }
+  }
+  return newPlaylist;
+}
+
+// Plays a song for as many times as can fit in an hour, without exceeding.
 function hourSongLoop(id){
   currentSong=songById(id);
   loopCount=Math.floor(3600/currentSong.duration);
