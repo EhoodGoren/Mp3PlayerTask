@@ -108,6 +108,40 @@ function isIdTakenPlaylists(id){
   }
 }
 
+//Creates a new song id, the first one from 1 (included) that isn't taken yet.
+function songIdGenerator(){
+  id=0;
+  let taken=false;
+  do { //Increases id by 1 every time. Loops through the songs array, trying to find a non-occupied id.
+    taken=false;
+    id++;
+    for(let song of player.songs){
+      if(song.id===id){
+        taken=true;
+        break;
+      }
+    }
+  } while(taken===true);
+  return id;
+}
+
+//Creates a new playlist id, the first one from 1 (included) that isn't taken yet.
+function playlistIdGenerator(){
+  id=0;
+  let taken=false;
+  do { //Increases id by 1 every time. Loops through the playlists array, trying to find a non-occupied id.
+    taken=false;
+    id++;
+    for(let list of player.playlists){
+      if(list.id===id){
+        taken=true;
+        break;
+      }
+    }
+  } while(taken===true);
+  return id;
+}
+
 /*
 Task functions
 */
@@ -128,23 +162,14 @@ function removeSong(id) {
   }
 }
 
+//Adds a new song with the given properties. Generates a new id if not provided one. Error if id is taken or not a number
 function addSong(title, album, artist, duration, id) {
   if(id>0){
     isIdTakenSongs(id);
-  }
-  if(!id>0){
-    id=0;
-    let taken=false;
-    do {
-      taken=false;
-      id++;
-      for(let song of player.songs){
-        if(song.id===id){
-          taken=true;
-          break;
-        }
-      }
-    } while(taken===true);
+  } else if(id===undefined){
+    id=songIdGenerator();
+  } else{
+    throw "Id should be a number!"
   }
   player.songs.push({"id":id,"title":title,"album":album,"artist":artist,"duration":durationToSec(duration)});
   return id;
@@ -163,20 +188,10 @@ function removePlaylist(id) {
 function createPlaylist(name, id) {
   if(id>0){
       isIdTakenPlaylists(id);
-  }
-  if(!id>0){
-    id=0;
-    let taken=false;
-    do {
-      taken=false;
-      id++;
-      for(let list of player.playlists){
-        if(list.id===id){
-          taken=true;
-          break;
-        }
-      }
-    } while(taken===true);
+  }else if(id===undefined){
+    id=playlistIdGenerator();
+  }else{
+    throw "Id should be a number!";
   }
   player.playlists.push({"id":id,"name":name,"songs":[]});
     return id;
