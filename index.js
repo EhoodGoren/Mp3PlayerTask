@@ -267,8 +267,13 @@ Returns an object with:
 function searchByQuery(query) {
   let songs=[];
   let playlists=[];
+  query=query.toLowerCase();
+  //Searches the query in songs' attributes.
   for(let song of player.songs){
-    if(song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)){
+    if(song.title.toLowerCase().includes(query) || 
+      song.album.toLowerCase().includes(query) || 
+      song.artist.toLowerCase().includes(query) )
+    {
       songs.push(song);
     }
   }
@@ -278,12 +283,12 @@ function searchByQuery(query) {
     else return 1;
   });
 
+  //Searches the query in playlists' attributes.
   for(let playlist of player.playlists){
-    if(playlist.name.includes(query)){
+    if(playlist.name.toLowerCase().includes(query)){
       playlists.push(playlist);
     }
   }
-  
   //sorts by name
   playlists.sort(function(a,b){
     if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
