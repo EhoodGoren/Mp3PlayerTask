@@ -150,6 +150,7 @@ function playlistIdGenerator(){
   return id;
 }
 
+
 /*
  * Task functions
  */
@@ -328,6 +329,37 @@ function searchByDuration(duration) {
   }
 
   return closestElement;
+}
+
+
+/*
+ * Bonus functions
+ */
+
+
+function sortPlaylistById(id){
+  currentPlaylistSongs=playlistById(id).songs;
+  currentPlaylistSongs.sort((a,b) => a-b)
+  return currentPlaylistSongs;
+}
+
+function sortSongsById(){
+  let idArr=[];
+  for(let song of player.songs){
+    idArr.push(song.id);
+  }
+  idArr.sort((a,b) => a-b);
+  idArr=idArr.map(songById);
+  return idArr;
+}
+
+function hourSongLoop(id){
+  currentSong=songById(id);
+  loopCount=Math.floor(3600/currentSong.duration);
+  console.log(`Playing ${currentSong.title} for ${loopCount} times.`)
+  for(let i=1; i<=loopCount; i++){
+    playSong(id);
+  }
 }
 
 module.exports = {
