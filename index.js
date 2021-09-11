@@ -220,16 +220,13 @@ function editPlaylist(playlistId, songId) {
   }
 }
 
+//Sums the total duration of all the songs in a playlist
 function playlistDuration(id) {
-  let chosenPlaylistSongs=playlistById(id).songs
+  playlistById(id); // Checks if the playlist id exists.
+  let chosenPlaylistSongs=playlistById(id).songs;
   let sum=0;
   for(let song of chosenPlaylistSongs){
-    if(typeof(songById(song).duration)==='number'){
-      sum+=songById(song).duration;
-    }
-    else{
-      sum+=durationToSec(songById(song).duration);
-    }
+    sum+=songById(song).duration;
   }
   return sum;
 }
