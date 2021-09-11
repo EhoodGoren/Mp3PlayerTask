@@ -93,16 +93,15 @@ function durationToSec(duration){
   return secDuration;
 }
 
-function isIdTaken(id, where){
-  if(where==="songs"){
-    for(let song of player.songs){
-      if(song.id===id) throw "Id taken";
-    }
+function isIdTakenSongs(id){
+  for(let song of player.songs){
+    if(song.id===id) throw "Id taken";
   }
-  if(where==="playlists"){
-    for(let list of player.playlists){
-      if(list.id===id) throw "Id taken";
-    }
+}
+
+function isIdTakenPlaylists(id){
+  for(let list of player.playlists){
+    if(list.id===id) throw "Id taken";
   }
 }
 
@@ -136,12 +135,7 @@ function removeSong(id) {
 
 function addSong(title, album, artist, duration, id) {
   if(id>0){
-    try{
-      isIdTaken(id,"songs");
-    }
-    catch{
-      throw "Id taken";
-    }
+    isIdTakenSongs(id);
   }
   if(!id>0){
     id=0;
@@ -157,7 +151,6 @@ function addSong(title, album, artist, duration, id) {
       }
     } while(taken===true);
   }
-
   player.songs.push({"id":id,"title":title,"album":album,"artist":artist,"duration":durationToSec(duration)});
   return id;
 }
@@ -174,12 +167,7 @@ function removePlaylist(id) {
 
 function createPlaylist(name, id) {
   if(id>0){
-    try{
-      isIdTaken(id,"playlists");
-    }
-    catch{
-      throw "Id is taken"
-    }
+      isIdTakenPlaylists(id);
   }
   if(!id>0){
     id=0;
